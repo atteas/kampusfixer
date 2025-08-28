@@ -28,6 +28,9 @@ function waitForElm(selector) {
     });
 }
 
+function isASCII(str) {
+    return /^[\x00-\x7F]*$/.test(str);
+}
 
 // main
 function findEditorContainer(){
@@ -39,7 +42,7 @@ function findEditorContainer(){
         //disable å, ä and ö
         document.addEventListener("keydown", function(e){
             if (editorOpen){
-                if (e.key == 'å' || e.key == 'ä' || e.key == 'ö'){
+                if (!isASCII(e.key)){
                     e.preventDefault();
                 }
             }
