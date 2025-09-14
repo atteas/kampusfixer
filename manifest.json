@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Kampus Fixer",
     "description": "This extension fixes some problems in the Kampus educational platform, like non-ascii characters crashing the whole page.",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "icons": {
     "16": "icons/kafi_16.png",
     "48": "icons/kafi_48.png",

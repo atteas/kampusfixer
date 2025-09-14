@@ -1,7 +1,7 @@
 /******************************** 
 
     Kampus Fixer
-    Version: 0.0.5
+    Version: 0.0.6
 
     Programmer: atteas @ github
 
@@ -37,7 +37,7 @@ function findEditorContainer(){
     var editorOpen = false;
 
     waitForElm('eb-abitti-editor div.rich-text-editor.answer').then((editorContainer) => {
-        console.log("container fouund, editor open: ", editorOpen);
+        console.log("container found, editor open: ", editorOpen);
 
         //disable å, ä and ö
         document.addEventListener("keydown", function(e){
@@ -68,8 +68,19 @@ function findEditorContainer(){
 }
 
 function deleteTranslatorMenu(){
-    waitForElm('div.cdk-overlay-connected-position-bounding-box div.cdk-overlay-pane').then((overLayBox) => {
-        overLayBox.parentElement?.remove();
+    waitForElm('div.cdk-overlay-container').then(overLayContainer => {
+        const observer = new MutationObserver(mutations => {
+            console.log("MUTATION!!!!");
+            if (overLayContainer.querySelector('div[role="menu"].mat-mdc-menu-panel')) {
+                overLayContainer.querySelector('div[role="menu"].mat-mdc-menu-panel').remove();
+            }
+        });
+
+        observer.observe(overLayContainer, {
+            attributes: true,
+            childList: true,
+            subtree: true
+        });
     });
 }
 
@@ -82,10 +93,10 @@ function monitorUrlChanges() {
         
             if (currentUrl.startsWith("https://kampus.sanomapro.fi/") && currentUrl.includes("/item/")) {
                 findEditorContainer();
-                deleteTranslatorMenu()
             }
         }
     }, 100); // Check every 100 ms
 }
 
+deleteTranslatorMenu();
 monitorUrlChanges();
