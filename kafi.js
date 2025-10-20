@@ -28,45 +28,7 @@ function waitForElm(selector) {
     });
 }
 
-function isASCII(str) {
-    return /^[\x00-\x7F]*$/.test(str);
-}
-
 // main
-function findEditorContainer(){
-    var editorOpen = false;
-
-    waitForElm('eb-abitti-editor div.rich-text-editor.answer').then((editorContainer) => {
-        console.log("container found, editor open: ", editorOpen);
-
-        //disable å, ä and ö
-        document.addEventListener("keydown", function(e){
-            if (editorOpen){
-                if (!isASCII(e.key)){
-                    e.preventDefault();
-                }
-            }
-        });
-
-
-        //mutationobserver for text field to see when the math editor is open
-        const observer = new MutationObserver(mutations => {
-            if (editorContainer.querySelector('img.equation.active')) {
-                editorOpen = true;
-                console.log("editor open");
-            } else {
-                editorOpen = false;
-                console.log("editor not open");
-            }
-        });
-
-        observer.observe(editorContainer, {
-            childList: true,
-            subtree: true
-        });
-    });
-}
-
 function deleteTranslatorMenu(){
     waitForElm('div.cdk-overlay-container').then(overLayContainer => {
         const observer = new MutationObserver(mutations => {
@@ -83,20 +45,4 @@ function deleteTranslatorMenu(){
         });
     });
 }
-
-function monitorUrlChanges() {
-    let currentUrl = "";
-
-    setInterval(() => {
-        if (currentUrl !== window.location.href) {
-            currentUrl = window.location.href;
-        
-            if (currentUrl.startsWith("https://kampus.sanomapro.fi/") && currentUrl.includes("/item/")) {
-                findEditorContainer();
-            }
-        }
-    }, 100); // Check every 100 ms
-}
-
 deleteTranslatorMenu();
-monitorUrlChanges();
